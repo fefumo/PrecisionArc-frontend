@@ -1,17 +1,11 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
 const API_BASE_URL = 'http://localhost:8080/PrecisionArc/auth';
 
 export const loginUser = (username, password) => {
-    return axios.post(`${API_BASE_URL}/login`, {
-        username,
-        password: password,
-    });
+    return apiClient.post("/login", { username, password });
 };
 
 export const registerUser = (username, password) => {
-    return axios.post(`${API_BASE_URL}/register`, {
-        username,
-        password: password,
-    });
+    return apiClient.post("/register", { username, password });
 };

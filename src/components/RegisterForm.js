@@ -5,26 +5,24 @@ import { registerUser } from '../services/auth-api';
 function RegisterForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState(""); // Для подтверждения пароля
-    const [error, setError] = useState(""); // Стейт для ошибки
-    const navigate = useNavigate(); // Хук для навигации
+    const [confirmPassword, setConfirmPassword] = useState(""); 
+    const [error, setError] = useState(""); 
+    const navigate = useNavigate(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
-        // Проверка на совпадение паролей
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
             return;
         }
 
-        // Пример простого "регистрации" (на самом деле, вам нужно будет отправить запрос на сервер)
         if (username && password) {
             try{
                 const response = await registerUser(username,password);
                 console.log("Registration successful for", username);
-                navigate('/login'); // Перенаправляем на страницу логина после успешной регистрации    
+                navigate('/'); // go to welcomepage   
             }catch(err){
                 console.error("Registration failed:", err.response?.data || err.message);
                 setError(err.response?.data?.message || "Registration failed.");    

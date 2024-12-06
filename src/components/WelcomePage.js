@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LoginForm from './LoginForm'; // Ваш компонент LoginForm
+import Header from "./Header";
+import { useSelector } from 'react-redux';
 
 function WelcomePage() {
-    const [username, setUsername] = useState(""); // Стейт для хранения имени пользователя
+    const [username, setUsername] = useState("");
+    const token = useSelector((state) => state.auth.token);
+
 
     const handleLogin = (username) => {
-        // Обрабатываем успешный вход, сохраняем username
         setUsername(username);
     };
 
     return (
         <div>
-            <h1>Welcome to the App</h1>
+            <Header/>
             {username ? (
                 <div>
                     <h2>Welcome, {username}!</h2>
-                    <Link to="/home">Go to Home</Link>
+                    <Link to="/welcomepage">Go to Home</Link>
                 </div>
             ) : (
                 <div>

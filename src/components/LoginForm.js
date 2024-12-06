@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import '../services/auth-api'
 import { loginUser } from "../services/auth-api";
-import { Link } from 'react-router-dom'
+import { useDispatch } from "react-redux";
+import { setToken } from "../services/store";
+import { useNavigate } from "react-router-dom";
+
 function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit= async (e) => {
         e.preventDefault();
@@ -14,8 +18,11 @@ function LoginForm() {
         try{
             const response = await loginUser(username, password);
             console.log("succsessful login: ", response.data);
+            const { token } = response.data;
+            dispatch(setToken(token));
             alert("you are logged in");
-            //now i have to be able to go to the next page
+            navigate("/mainpage");
+            
         } catch(err){
             console.error("Login failed:", err.response?.data || err.message);
             setError(err.response?.data?.message || "Login failed.");
@@ -53,4 +60,5 @@ function LoginForm() {
         </>
     )
 };
+
 export default LoginForm;
