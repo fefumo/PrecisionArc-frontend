@@ -1,52 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CanvasGraph from './components/CanvasGraph';
-import AddPointForm from './components/AddPointForm';
+import { useSelector } from 'react-redux';
 import { useGetUserPointsQuery, useAddUserPointMutation } from './services/graph-api';
+import CanvasGraph from './components/graph/CanvasGraph';
+import PointsTable from './components/graph/PointsTable';
+import AddPointForm from './components/forms/AddPointForm';
 
-export default function MainPage() {
-    const isAuthenticated = useSelector((state) => state.auth.token !== null); // Проверка аутентификации
+const MainPage = () => {
+    const isAuthenticated = useSelector((state) => state.auth.token !== null);
     const navigate = useNavigate();
-
-    // Состояния для работы с графиком
     const [rValue, setRValue] = useState(3);
-    const { data: points = [], refetch } = useGetUserPointsQuery(); // Запрос точек с сервера
-    const [addUserPoint] = useAddUserPointMutation(); // Мутация для добавления точки
+
+    const { data: points = [], refetch } = useGetUserPointsQuery();
+    const [addUserPoint] = useAddUserPointMutation();
 
     useEffect(() => {
         if (!isAuthenticated) {
-            navigate('/'); // Если не аутентифицирован, переходим на WelcomePage
+            navigate('/');
         }
     }, [isAuthenticated, navigate]);
 
-    const handleCanvasClick = async (x, y) => {
+    const handleAddPoint = async (x, y) => {
         try {
-            const point = await addUserPoint({ x, y, r: rValue }).unwrap(); // Добавляем точку
-            refetch(); // Обновляем данные точек
+            const response = await addUserPoint({ x, y, r: rValue }).unwrap();
+            refetch(); // Update points list
         } catch (error) {
-            console.error("Error adding point:", error);
-            alert("Failed to add point. Please try again.");
+            alert(error?.data?.message || 'Failed to add point');
         }
     };
 
     return (
         <div>
             <h1>Main Page</h1>
-            <AddPointForm />
-            <label>
-                R Value: 
-                <input 
-                    type="number" 
-                    value={rValue} 
-                    onChange={(e) => setRValue(Number(e.target.value))} 
-                />
-            </label>
-            <CanvasGraph 
-                rValue={rValue} 
-                points={points} 
-                onCanvasClick={handleCanvasClick} 
+            <AddPointForm r={rValue} onRChange={setRValue} />
+            <CanvasGraph
+                rValue={rValue}
+                points={points}
+                onCanvasClick={(x, y) => handleAddPoint(x, y)}
             />
+            <PointsTable points={points} />
         </div>
     );
-}
+};
+
+export default MainPage;

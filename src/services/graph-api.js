@@ -4,7 +4,7 @@ import { getTokenFromLocalStorage } from './api-utils';
 const graphApi = createApi({
   reducerPath: 'graphApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/PrecisionArc/graph',
+    baseUrl: 'http://localhost:8080/PrecisionArc/points', 
     prepareHeaders: (headers) => {
       const token = getTokenFromLocalStorage();
       if (token) {
@@ -15,11 +15,11 @@ const graphApi = createApi({
   }),
   endpoints: (builder) => ({
     getUserPoints: builder.query({
-      query: () => '/points',
+      query: () => '/', // GET /points
     }),
     addUserPoint: builder.mutation({
       query: (newPoint) => ({
-        url: '/points',
+        url: '/',
         method: 'POST',
         body: newPoint,
       }),

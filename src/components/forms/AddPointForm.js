@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useAddUserPointMutation } from '../services/graph-api';  // Хук для добавления точки
+import { useAddUserPointMutation } from '../../services/graph-api';
+import PointInput from './PointInput';
 
-const AddPointForm = () => {
+const AddPointForm = ({ r, onRChange }) => {
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
-  const [r, setR] = useState(3);
   const [addUserPoint] = useAddUserPointMutation();  // Хук для отправки запроса на добавление точки
 
   const handleSubmit = async (e) => {
@@ -15,18 +15,14 @@ const AddPointForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        X:
-        <input type="number" value={x} onChange={(e) => setX(e.target.value)} />
-      </label>
-      <label>
-        Y:
-        <input type="number" value={y} onChange={(e) => setY(e.target.value)} />
-      </label>
-      <label>
-        R:
-        <input type="number" value={r} onChange={(e) => setR(e.target.value)} />
-      </label>
+      <PointInput 
+        x={x} 
+        y={y} 
+        r={r}  // Передаем r сюда
+        onXChange={setX} 
+        onYChange={setY} 
+        onRChange={onRChange}  // Передаем функцию для изменения r
+      />
       <button type="submit">Add Point</button>
     </form>
   );

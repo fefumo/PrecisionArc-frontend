@@ -1,11 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import '../styles/Canvas.css';
-import { useGetUserPointsQuery } from '../services/graph-api';  // Хук для получения точек
+import '../../styles/Canvas.css'
 
 const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
-    
     const canvasRef = useRef(null);
-
     const axisRange = 12;
 
     const drawGraph = () => {
@@ -26,8 +23,10 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
             drawArea(ctx, unitScale, rValue);
         }
 
-        drawPoints(ctx, unitScale, points);  // Убедитесь, что points передаются и обрабатываются
+        drawPoints(ctx, unitScale, points);
     };
+
+    
 
     const drawPoints = (ctx, unitScale, points) => {
         if (!Array.isArray(points) || points.length === 0) return;
@@ -46,7 +45,6 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
             ctx.fill();
         });
     };
-
 
     const drawAxes = (ctx, unitScale) => {
         const centerX = canvasRef.current.width / 2;
@@ -123,7 +121,7 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         ctx.fill();
     };
 
-    const handleCanvasClick = (event) => {
+    const handleCanvasClick = async (event) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();

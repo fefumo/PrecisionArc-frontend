@@ -4,7 +4,7 @@ import store from './services/store';
 import MainPage from './MainPage';
 import WelcomePage from './WelcomePage';
 import PrivateRoute from './components/PrivateRoute';
-import RegisterForm from './components/RegisterForm';
+import RegisterForm from './components/forms/RegisterForm';
 
 function App() {
     return (

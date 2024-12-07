@@ -27,8 +27,8 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(graphApi.middleware)  // Обязательно добавь middleware для graphApi
-      .concat(authApi.middleware),  // Также добавь middleware для authApi
+      .concat(graphApi.middleware)  
+      .concat(authApi.middleware), 
 });
 
 export default store;

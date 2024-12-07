@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setToken } from "../services/store";
+import { setToken } from "../../services/store";
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { useLoginUserMutation } from "../services/auth-api"; // Импортируем хук для входа
-import { Navigate } from "react-router-dom";
+import { useLoginUserMutation } from "../../services/auth-api"; // Импортируем хук для входа
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Получаем хук для мутации
     const [loginUser, { isLoading, error: apiError }] = useLoginUserMutation();
@@ -27,7 +28,7 @@ function LoginForm() {
             const { token } = response;
             dispatch(setToken(token)); // Сохраняем токен в Redux
             alert("You are logged in");
-            Navigate('/main')
+            navigate('/main')
         } catch (err) {
             console.error("Login failed:", err.message || err);
             setError(apiError?.data?.message || "Login failed.");
@@ -66,7 +67,7 @@ function LoginForm() {
                             icon="pi pi-sign-in" 
                             type="submit" 
                             className="p-button-success" 
-                            loading={isLoading} // Показываем индикатор загрузки
+                            loading={isLoading}
                         />
                     </div>
 

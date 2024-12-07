@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useNavigate } from 'react-router-dom';
-import { useRegisterUserMutation } from '../services/auth-api'; // Импортируем хук для регистрации
+import { useRegisterUserMutation } from '../../services/auth-api'; // Импортируем хук для регистрации
 
 function RegisterForm() {
     const [username, setUsername] = useState("");
