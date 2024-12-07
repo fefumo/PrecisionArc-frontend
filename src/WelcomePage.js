@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-import LoginForm from './LoginForm'; // Ваш компонент LoginForm
-import Header from "./Header";
+import LoginForm from './components/LoginForm'; // Ваш компонент LoginForm
+import Header from "./components/Header";
 import { useSelector } from 'react-redux';
 
 function WelcomePage() {

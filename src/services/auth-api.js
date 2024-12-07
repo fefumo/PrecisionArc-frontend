@@ -1,11 +1,35 @@
-import apiClient from './apiClient';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { getTokenFromLocalStorage } from './api-utils';
 
-const API_BASE_URL = 'http://localhost:8080/PrecisionArc/auth';
+const authApi = createApi({
+  reducerPath: 'authApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:8080/PrecisionArc/auth',
+    prepareHeaders: (headers) => {
+      const token = getTokenFromLocalStorage();
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    loginUser: builder.mutation({
+      query: (credentials) => ({
+        url: '/login',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+    registerUser: builder.mutation({
+      query: (credentials) => ({
+        url: '/register',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+  }),
+});
 
-export const loginUser = (username, password) => {
-    return apiClient.post("/login", { username, password });
-};
-
-export const registerUser = (username, password) => {
-    return apiClient.post("/register", { username, password });
-};
+export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export default authApi;
