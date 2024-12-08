@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from 'primereact/button';
+import { clearToken } from './services/store'; // Импортируем экшен для очистки токена
 import { useGetUserPointsQuery, useAddUserPointMutation, useClearTableMutation } from './services/graph-api';
 import CanvasGraph from './components/graph/CanvasGraph';
 import PointsTable from './components/graph/PointsTable';
@@ -9,6 +10,7 @@ import PointForm from './components/forms/PointForm';
 
 const MainPage = () => {
     const isAuthenticated = useSelector((state) => state.auth.token !== null);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [rValue, setRValue] = useState(3);
 
@@ -46,6 +48,11 @@ const MainPage = () => {
         }
     };
 
+    const handleLogout = () => {
+        dispatch(clearToken()); // Очищаем токен из состояния и локального хранилища
+        navigate('/'); // Перенаправляем на главную страницу
+    };
+
     return (
         <div>
             <h1>Main Page</h1>
@@ -66,6 +73,12 @@ const MainPage = () => {
                 className="p-button-danger"
                 onClick={handleClearTable}
                 disabled={isClearing}
+            />
+            <Button
+                label="Logout"
+                icon="pi pi-sign-out"
+                className="p-button-danger"
+                onClick={handleLogout} // Обработчик выхода
             />
         </div>
     );

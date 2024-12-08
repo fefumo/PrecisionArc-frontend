@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import Header from "./components/Header";
-// import { useSelector } from 'react-redux';
 
 function WelcomePage() {
     const [username, setUsername] = useState("");
-    // const token = useSelector((state) => state.auth.token);
 
 
     const handleLogin = (username) => {
