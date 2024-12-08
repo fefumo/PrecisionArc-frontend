@@ -96,32 +96,32 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
     const drawArea = (ctx, unitScale, rValue) => {
         const centerX = canvasRef.current.width / 2;
         const centerY = canvasRef.current.height / 2;
-
+    
         ctx.fillStyle = 'rgba(241, 196, 15, 0.5)';
-
-        // Четверть круга
+    
+        // Полукруг (левая верхняя полуплоскость)
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, unitScale * rValue, 0, 0.5 * Math.PI, false);
+        ctx.arc(centerX, centerY, unitScale * rValue, Math.PI, 1.5 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
-
-        // Прямоугольник
+    
+        // Прямоугольник (правая верхняя полуплоскость)
         ctx.fillRect(
-            centerX - unitScale * rValue,
+            centerX,
             centerY - unitScale * rValue,
             unitScale * rValue,
             unitScale * rValue
         );
-
-        // Треугольник
+    
+        // Треугольник (правая нижняя полуплоскость)
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.lineTo(centerX + unitScale * rValue / 2, centerY);
-        ctx.lineTo(centerX, centerY - unitScale * rValue);
+        ctx.moveTo(centerX, centerY); // Вершина треугольника в центре
+        ctx.lineTo(centerX + unitScale * rValue, centerY); // Правая точка основания
+        ctx.lineTo(centerX, centerY + unitScale * rValue); // Нижняя точка основания
         ctx.closePath();
         ctx.fill();
-    };
+    };    
 
     const handleCanvasClick = async (event) => {
         const canvas = canvasRef.current;
