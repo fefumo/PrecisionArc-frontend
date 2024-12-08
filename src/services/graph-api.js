@@ -24,8 +24,15 @@ const graphApi = createApi({
         body: newPoint,
       }),
     }),
+    clearTable: builder.mutation({
+      query: (credentials) => ({
+        url: '/clearTable',
+        method: 'GET',
+        body: credentials,
+      }),
+    }),    
   }),
 });
 
-export const { useGetUserPointsQuery, useAddUserPointMutation } = graphApi;
+export const { useGetUserPointsQuery, useAddUserPointMutation, useClearTableMutation } = graphApi;
 export default graphApi;
