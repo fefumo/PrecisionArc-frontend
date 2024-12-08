@@ -60,7 +60,7 @@ const AddPointForm = ({ r, onRChange }) => {
                         id="r-slider"
                         value={r}
                         onChange={(e) => onRChange(e.value)}
-                        min={1}
+                        min={-5}
                         max={3}
                         style={{ width: "200px" }}
                     />

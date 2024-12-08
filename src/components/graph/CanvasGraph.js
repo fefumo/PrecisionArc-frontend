@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import '../../styles/Canvas.css'
+import '../../styles/Canvas.css';
 
 const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
     const canvasRef = useRef(null);
-    const axisRange = 12;
+    const axisRange = 10; // Adjust this for scaling.
 
     const drawGraph = useCallback(() => {
         const canvas = canvasRef.current;
@@ -19,14 +19,12 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
 
         if (rValue) {
             if (rValue < 0) rValue = 0;
-            if (rValue > 5) rValue = 5;
+            if (rValue > 3) rValue = 3;
             drawArea(ctx, unitScale, rValue);
         }
 
         drawPoints(ctx, unitScale, points);
-    }, [rValue, points]);  // drawGraph зависит от rValue и points
-
-    
+    }, [rValue, points]);
 
     const drawPoints = (ctx, unitScale, points) => {
         if (!Array.isArray(points) || points.length === 0) return;
@@ -53,28 +51,33 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         const centerY = canvasRef.current.height / 2;
 
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2.5;
+
+        // Draw main axes
         ctx.beginPath();
-        ctx.moveTo(0, centerY);
+        ctx.moveTo(0, centerY); // X-axis
         ctx.lineTo(canvasRef.current.width, centerY);
-        ctx.moveTo(centerX, 0);
+        ctx.moveTo(centerX, 0); // Y-axis
         ctx.lineTo(centerX, canvasRef.current.height);
         ctx.stroke();
 
+        // Draw arrows
         ctx.beginPath();
-        ctx.moveTo(canvasRef.current.width - 10, centerY - 5);
+        ctx.moveTo(canvasRef.current.width - 10, centerY - 5); // X-axis arrow
         ctx.lineTo(canvasRef.current.width, centerY);
         ctx.lineTo(canvasRef.current.width - 10, centerY + 5);
-        ctx.moveTo(centerX - 5, 10);
+
+        ctx.moveTo(centerX - 5, 10); // Y-axis arrow
         ctx.lineTo(centerX, 0);
         ctx.lineTo(centerX + 5, 10);
         ctx.stroke();
 
+        // Draw axis markings (4 per quadrant)
         ctx.fillStyle = 'black';
         ctx.font = '12px Arial';
 
-        for (let i = -5; i <= 5; i++) {
-            if (i === 0) continue;
+        for (let i = -4; i <= 4; i++) {
+            if (i === 0) continue; // Skip 0
             const x = centerX + i * unitScale;
             ctx.beginPath();
             ctx.moveTo(x, centerY - 5);
@@ -96,16 +99,16 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
     const drawArea = (ctx, unitScale, rValue) => {
         const centerX = canvasRef.current.width / 2;
         const centerY = canvasRef.current.height / 2;
-    
+
         ctx.fillStyle = 'rgba(241, 196, 15, 0.5)';
-    
+
         // Semicircle
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, unitScale * rValue, Math.PI, 1.5 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
-    
+
         // Rectangle
         ctx.fillRect(
             centerX,
@@ -113,7 +116,7 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
             unitScale * rValue,
             unitScale * rValue
         );
-    
+
         // Triangle
         ctx.beginPath();
         ctx.moveTo(centerX, centerY); 
@@ -121,9 +124,9 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         ctx.lineTo(centerX, centerY + unitScale * rValue); 
         ctx.closePath();
         ctx.fill();
-    };    
+    };
 
-    const handleCanvasClick = async (event) => {
+    const handleCanvasClick = (event) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();
@@ -161,13 +164,13 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         return () => {
             window.removeEventListener('resize', resizeCanvas);
         };
-    }, [drawGraph]);  // Зависим от drawGraph, так как она теперь стабилизирована
+    }, [drawGraph]);
 
     useEffect(() => {
-        drawGraph(); // Отдельно для обновлений rValue и points
-    }, [drawGraph]);  // Зависим от drawGraph, rValue и points
+        drawGraph();
+    }, []);
 
-    return <canvas ref={canvasRef} onClick={handleCanvasClick} />;
+    return <canvas ref={canvasRef} onClick={handleCanvasClick} style={{ width: '350px', height: '350px' }} />;
 };
 
 export default CanvasGraph;
