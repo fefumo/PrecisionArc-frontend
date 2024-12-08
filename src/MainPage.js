@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useGetUserPointsQuery, useAddUserPointMutation } from './services/graph-api';
 import CanvasGraph from './components/graph/CanvasGraph';
 import PointsTable from './components/graph/PointsTable';
-import AddPointForm from './components/forms/AddPointForm';
+import PointForm from './components/forms/PointForm';
 
 const MainPage = () => {
     const isAuthenticated = useSelector((state) => state.auth.token !== null);
@@ -22,20 +22,24 @@ const MainPage = () => {
 
     const handleAddPoint = async (x, y) => {
         try {
-            console.log('Adding point:', { x, y, r: rValue }); 
+            console.log('Adding point:', { x, y, r: rValue });
             const response = await addUserPoint({ x, y, r: rValue }).unwrap();
-            console.log('Point added successfully:', response); 
+            console.log('Point added successfully:', response);
             refetch(); // Update points list
         } catch (error) {
-            console.error('Error adding point:', error); 
+            console.error('Error adding point:', error);
             alert(error?.data?.message || 'Failed to add point');
         }
     };
-    
+
     return (
         <div>
             <h1>Main Page</h1>
-            <AddPointForm r={rValue} onRChange={setRValue} />
+            <PointForm
+                r={rValue}
+                onRChange={setRValue}
+                onSubmit={(x, y) => handleAddPoint(x, y)}
+            />
             <CanvasGraph
                 rValue={rValue}
                 points={points}

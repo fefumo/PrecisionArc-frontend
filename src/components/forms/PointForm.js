@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
-import { useAddUserPointMutation } from '../../services/graph-api';
 import { Button } from "primereact/button";
-import { Slider } from "primereact/slider"; 
-import { InputText } from "primereact/inputtext"; 
+import { Slider } from "primereact/slider";
+import { InputText } from "primereact/inputtext";
 
 
-const AddPointForm = ({ r, onRChange }) => {
+const AddPointForm = ({ r, onRChange, onSubmit }) => {
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
-    const [addUserPoint] = useAddUserPointMutation();  // Hook for sending a request to add a point
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const newPoint = { x, y, r };
-        console.log('Submitting new point:', newPoint);
-
-        try {
-            const response = await addUserPoint(newPoint).unwrap();
-            console.log('Server response:', response);
-        } catch (error) {
-            console.error('Error adding point:', error);
+        if (y < -3 || y > 3) {
+            alert('Y must be between -3 and 3');
+            return;
         }
-
+        onSubmit(x, parseFloat(y)); // Use the onSubmit callback from props
     };
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -46,13 +40,17 @@ const AddPointForm = ({ r, onRChange }) => {
                         keyfilter="int"
                         id="y-text"
                         value={y}
-                        onChange={(e) => setY(y)}
+                        onChange={(e) => {
+                            const inputValue = e.target.value;
+                            setY(inputValue);
+                        }}
                         style={{ width: "50px" }}
                     />
                     <small id="username-help">
                         Y must be between -3 and 3
                     </small>
                 </div>
+
 
                 <div>
                     <label htmlFor="r-slider" style={{ marginRight: "1rem" }}>R:</label>
