@@ -15,11 +15,11 @@ const graphApi = createApi({
   }),
   endpoints: (builder) => ({
     getUserPoints: builder.query({
-      query: () => '/', // GET /points
+      query: () => '/get',
     }),
     addUserPoint: builder.mutation({
       query: (newPoint) => ({
-        url: '/',
+        url: '/add',
         method: 'POST',
         body: newPoint,
       }),

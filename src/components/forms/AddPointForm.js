@@ -9,8 +9,16 @@ const AddPointForm = ({ r, onRChange }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPoint = { x, y, r };  // Создаем объект для новой точки
-    await addUserPoint(newPoint);  // Отправляем запрос для добавления точки
+    const newPoint = { x, y, r };  
+    console.log('Submitting new point:', newPoint);
+
+    try {
+        const response = await addUserPoint(newPoint).unwrap();  
+        console.log('Server response:', response); 
+    } catch (error) {
+        console.error('Error adding point:', error); 
+    }
+
   };
 
   return (

@@ -34,12 +34,14 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         const centerX = canvasRef.current.width / 2;
         const centerY = canvasRef.current.height / 2;
 
+        console.log('Drawing points:', points); 
+
         points.forEach(point => {
             if (point.r !== rValue) return;
             const x = centerX + point.x * unitScale;
             const y = centerY - point.y * unitScale;
 
-            ctx.fillStyle = point.hit ? 'rgb(158, 255, 92)' : 'red';
+            ctx.fillStyle = point.result ? 'rgb(158, 255, 92)' : 'red';
             ctx.beginPath();
             ctx.arc(x, y, 3, 0, 2 * Math.PI);
             ctx.fill();
@@ -145,25 +147,26 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         onCanvasClick(parseFloat(x.toFixed(2)), parseFloat(y.toFixed(2)));
     };
 
-    const resizeCanvas = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetWidth;
-        drawGraph();
-    };
-
     useEffect(() => {
+        const resizeCanvas = () => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetWidth;
+            drawGraph();
+        };
+    
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
         return () => {
             window.removeEventListener('resize', resizeCanvas);
         };
-    }, [rValue, points]);
-
+    }, []);
+    
     useEffect(() => {
-        drawGraph();
+        drawGraph(); // Отдельно для обновлений rValue и points
     }, [rValue, points]);
+    
 
     return <canvas ref={canvasRef} onClick={handleCanvasClick} />;
 };

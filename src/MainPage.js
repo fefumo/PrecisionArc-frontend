@@ -22,13 +22,16 @@ const MainPage = () => {
 
     const handleAddPoint = async (x, y) => {
         try {
+            console.log('Adding point:', { x, y, r: rValue }); 
             const response = await addUserPoint({ x, y, r: rValue }).unwrap();
+            console.log('Point added successfully:', response); 
             refetch(); // Update points list
         } catch (error) {
+            console.error('Error adding point:', error); 
             alert(error?.data?.message || 'Failed to add point');
         }
     };
-
+    
     return (
         <div>
             <h1>Main Page</h1>
