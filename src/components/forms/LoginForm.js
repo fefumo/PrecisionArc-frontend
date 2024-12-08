@@ -4,7 +4,7 @@ import { setToken } from "../../services/store";
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { useLoginUserMutation } from "../../services/auth-api"; // Импортируем хук для входа
+import { useLoginUserMutation } from "../../services/auth-api"; 
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -14,7 +14,7 @@ function LoginForm() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Получаем хук для мутации
+    // hook for login
     const [loginUser, { isLoading, error: apiError }] = useLoginUserMutation();
 
     const handleSubmit = async (e) => {
@@ -22,12 +22,11 @@ function LoginForm() {
         setError(null);
 
         try {
-            // Выполняем мутацию для логина
+            // Perform a mutation for the login
             const response = await loginUser({ username, password }).unwrap();
             console.log("Successful login: ", response);
             const { token } = response;
-            dispatch(setToken(token)); // Сохраняем токен в Redux
-            alert("You are logged in");
+            dispatch(setToken(token));
             navigate('/main')
         } catch (err) {
             console.error("Login failed:", err.message || err);

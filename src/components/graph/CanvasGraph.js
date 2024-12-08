@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import '../../styles/Canvas.css'
 
 const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
     const canvasRef = useRef(null);
     const axisRange = 12;
 
-    const drawGraph = () => {
+    const drawGraph = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -24,7 +24,7 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         }
 
         drawPoints(ctx, unitScale, points);
-    };
+    }, [rValue, points]);  // drawGraph зависит от rValue и points
 
     
 
@@ -99,14 +99,14 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
     
         ctx.fillStyle = 'rgba(241, 196, 15, 0.5)';
     
-        // Полукруг (левая верхняя полуплоскость)
+        // Semicircle
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, unitScale * rValue, Math.PI, 1.5 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
     
-        // Прямоугольник (правая верхняя полуплоскость)
+        // Rectangle
         ctx.fillRect(
             centerX,
             centerY - unitScale * rValue,
@@ -114,11 +114,11 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
             unitScale * rValue
         );
     
-        // Треугольник (правая нижняя полуплоскость)
+        // Triangle
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY); // Вершина треугольника в центре
-        ctx.lineTo(centerX + unitScale * rValue, centerY); // Правая точка основания
-        ctx.lineTo(centerX, centerY + unitScale * rValue); // Нижняя точка основания
+        ctx.moveTo(centerX, centerY); 
+        ctx.lineTo(centerX + unitScale * rValue, centerY); 
+        ctx.lineTo(centerX, centerY + unitScale * rValue); 
         ctx.closePath();
         ctx.fill();
     };    
@@ -161,12 +161,11 @@ const CanvasGraph = ({ rValue, points, onCanvasClick }) => {
         return () => {
             window.removeEventListener('resize', resizeCanvas);
         };
-    }, []);
-    
+    }, [drawGraph]);  // Зависим от drawGraph, так как она теперь стабилизирована
+
     useEffect(() => {
         drawGraph(); // Отдельно для обновлений rValue и points
-    }, [rValue, points]);
-    
+    }, [drawGraph]);  // Зависим от drawGraph, rValue и points
 
     return <canvas ref={canvasRef} onClick={handleCanvasClick} />;
 };

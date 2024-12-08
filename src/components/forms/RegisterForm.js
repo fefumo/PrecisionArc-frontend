@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useNavigate } from 'react-router-dom';
-import { useRegisterUserMutation } from '../../services/auth-api'; // Импортируем хук для регистрации
+import { useRegisterUserMutation } from '../../services/auth-api';
 
 function RegisterForm() {
     const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ function RegisterForm() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // Получаем хук для мутации
+    // Hook for register
     const [registerUser, { isLoading, error: apiError }] = useRegisterUserMutation();
 
     const handleSubmit = async (e) => {
@@ -25,10 +25,9 @@ function RegisterForm() {
         }
 
         try {
-            // Выполняем мутацию для регистрации
-            const response = await registerUser({ username, password }).unwrap();
+            await registerUser({ username, password }).unwrap();
             console.log("Registration successful for", username);
-            navigate('/'); // Перенаправляем на страницу логина
+            navigate('/');
         } catch (err) {
             console.error("Registration failed:", err.message || err);
             setError(apiError?.data?.message || "Registration failed.");
