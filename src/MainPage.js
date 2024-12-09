@@ -7,6 +7,7 @@ import { useGetUserPointsQuery, useAddUserPointMutation, useClearTableMutation }
 import CanvasGraph from './components/graph/CanvasGraph';
 import PointsTable from './components/graph/PointsTable';
 import PointForm from './components/forms/PointForm';
+import graphApi from './services/graph-api';
 
 const MainPage = () => {
     const isAuthenticated = useSelector((state) => state.auth.token !== null);
@@ -22,6 +23,10 @@ const MainPage = () => {
         if (!isAuthenticated) {
             navigate('/');
         }
+        else{
+            refetch();
+        }
+
     }, [isAuthenticated, navigate]);
 
     const handleAddPoint = async (x, y) => {
@@ -50,6 +55,7 @@ const MainPage = () => {
 
     const handleLogout = () => {
         dispatch(clearToken()); // Очищаем токен из состояния и локального хранилища
+        dispatch(graphApi.util.resetApiState());
         navigate('/'); // Перенаправляем на главную страницу
     };
 
