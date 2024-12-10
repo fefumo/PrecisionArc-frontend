@@ -11,4 +11,4 @@
 > It's my first time using these technologies, therefore sorry for bad implementations/decisions in the code.
 
 > [!NOTE]
-> This is [back-end](https://github.com/fefumo/PrecisionArc-frontend) of this project for those who haven't seen it yet :sparkles:
+> This is [back-end](https://github.com/fefumo/PrecisionArc-backend) of this project for those who haven't seen it yet :sparkles:
