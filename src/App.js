@@ -5,10 +5,12 @@ import MainPage from './MainPage';
 import WelcomePage from './WelcomePage';
 import PrivateRoute from './components/PrivateRoute';
 import RegisterForm from './components/forms/RegisterForm';
+import './styles/App.css';
+
 
 function App() {
     return (
-        <Provider store={store}> {/* Оборачиваем приложение в Provider */}
+        <Provider store={store}>
             <Router>
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />

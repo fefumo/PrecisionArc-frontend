@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from 'primereact/button';
-import { clearToken } from './services/store'; // Импортируем экшен для очистки токена
+import { clearToken } from './services/store';
 import { useGetUserPointsQuery, useAddUserPointMutation, useClearTableMutation } from './services/graph-api';
 import CanvasGraph from './components/graph/CanvasGraph';
 import PointsTable from './components/graph/PointsTable';
@@ -18,6 +18,8 @@ const MainPage = () => {
     const { data: points = [], refetch } = useGetUserPointsQuery();
     const [addUserPoint] = useAddUserPointMutation();
     const [clearTable, { isLoading: isClearing }] = useClearTableMutation();
+
+    const username = useSelector((state) => state.auth.username);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -54,14 +56,17 @@ const MainPage = () => {
     };
 
     const handleLogout = () => {
-        dispatch(clearToken()); // Очищаем токен из состояния и локального хранилища
+        dispatch(clearToken()); // Clearing the token from state and local storage
         dispatch(graphApi.util.resetApiState());
-        navigate('/'); // Перенаправляем на главную страницу
+        navigate('/'); // Redirect to welcomePage
     };
 
     return (
         <div>
             <h1>Main Page</h1>
+            <div>
+                {username ? <p>Привет, {username}!</p> : <p>Вы не авторизованы</p>}
+            </div>
             <PointForm
                 r={rValue}
                 onRChange={setRValue}
@@ -84,7 +89,7 @@ const MainPage = () => {
                 label="Logout"
                 icon="pi pi-sign-out"
                 className="p-button-danger"
-                onClick={handleLogout} // Обработчик выхода
+                onClick={handleLogout}
             />
         </div>
     );

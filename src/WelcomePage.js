@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import LoginForm from './components/forms/LoginForm';
 import Header from "./components/Header";
+import './styles/welcomePage.css';
 
 function WelcomePage() {
     const [username, setUsername] = useState("");
@@ -12,22 +13,16 @@ function WelcomePage() {
     };
 
     return (
-        <div>
-            <Header/>
-            {username ? (
-                <div>
-                    <h2>Welcome, {username}!</h2>
-                    <Link to="/welcomepage">Go to Home</Link>
-                </div>
-            ) : (
-                <div>
-                    <LoginForm onLogin={handleLogin} />
-                    <p>Don't have an account?</p>
-                    <Link to="/register">Register</Link>
-                </div>
-            )}
+        <div className="welcome-container">
+          <Header />
+          <div className="login-section">
+            <LoginForm onLogin={handleLogin} />
+            <p className="register-prompt">Don't have an account?</p>
+            <Link className="register-link" to="/register">Register</Link>
+          </div>
         </div>
-    );
+      );
+      
 }
 
 export default WelcomePage;

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setToken } from "../../services/store";
+import { setToken, setUsername as setUsernameRedux } from "../../services/store";
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useLoginUserMutation } from "../../services/auth-api"; 
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function LoginForm() {
     const [username, setUsername] = useState("");
@@ -27,6 +28,10 @@ function LoginForm() {
             console.log("Successful login: ", response);
             const { token } = response;
             dispatch(setToken(token));
+            const decoded = jwtDecode(token);
+            console.log('decoded name: ', decoded.sub);
+            dispatch(setUsernameRedux(decoded.sub || decoded.username));
+
             navigate('/main')
         } catch (err) {
             console.error("Login failed:", err.message || err);
@@ -35,7 +40,7 @@ function LoginForm() {
     };
 
     return (
-        <div className="p-d-flex p-flex-column p-align-center p-mt-5">
+        <div className="">
             <div className="card">
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit}>
@@ -70,7 +75,7 @@ function LoginForm() {
                         />
                     </div>
 
-                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    {error && <p className="error-message">{error}</p>}
                 </form>
             </div>
         </div>

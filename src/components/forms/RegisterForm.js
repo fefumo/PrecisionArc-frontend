@@ -4,6 +4,7 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useNavigate } from 'react-router-dom';
 import { useRegisterUserMutation } from '../../services/auth-api';
+import '../../styles/register.css';
 
 function RegisterForm() {
     const [username, setUsername] = useState("");
@@ -14,6 +15,10 @@ function RegisterForm() {
 
     // Hook for register
     const [registerUser, { isLoading, error: apiError }] = useRegisterUserMutation();
+    
+    const handleLogout = () => {
+        navigate('/'); // Redirect to welcomePage
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,8 +40,8 @@ function RegisterForm() {
     };
 
     return (
-        <div className="p-d-flex p-flex-column p-align-center p-mt-5">
-            <div className="card">
+        <div>
+            <div className="register-container">
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="p-field">
@@ -69,14 +74,19 @@ function RegisterForm() {
                             required 
                         />
                     </div>
-
-                    <div className="p-field">
+                    <div>
                         <Button 
                             label="Register" 
                             icon="pi pi-user-plus" 
                             type="submit" 
                             className="p-button-primary" 
-                            loading={isLoading} // Показываем индикатор загрузки
+                            loading={isLoading}
+                        />
+                        <Button
+                            label="Back"
+                            icon="pi pi-sign-out"
+                            className='p-button-danger'
+                            onClick={handleLogout}
                         />
                     </div>
 
